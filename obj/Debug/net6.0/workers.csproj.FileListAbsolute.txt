@@ -1,5 +1,0 @@
-/home/back/Documents/src/.net core/workers/worker/obj/Debug/net6.0/worker.csproj.AssemblyReference.cache
-/home/back/Documents/src/.net core/workers/worker/obj/Debug/net6.0/workers.GeneratedMSBuildEditorConfig.editorconfig
-/home/back/Documents/src/.net core/workers/worker/obj/Debug/net6.0/workers.AssemblyInfoInputs.cache
-/home/back/Documents/src/.net core/workers/worker/obj/Debug/net6.0/workers.AssemblyInfo.cs
-/home/back/Documents/src/.net core/workers/worker/obj/Debug/net6.0/worker.csproj.CoreCompileInputs.cache
