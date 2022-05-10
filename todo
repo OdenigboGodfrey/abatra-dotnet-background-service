@@ -1,0 +1,13 @@
+- scrap sporty today page for each item ->
+- get home items *
+- get away items *
+- open particular game *
+- scrap dnb home *
+- scrap dnb away *
+- go back to parent page *
+- build data list structure *
+- fill structure with data *
+- persist structure to database
+- find front end
+- render data from persistent to front end
+- 
