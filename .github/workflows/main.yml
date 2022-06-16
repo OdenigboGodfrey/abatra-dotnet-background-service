@@ -1,0 +1,39 @@
+name: Deploy-AbatinoWorker
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  worker:
+    runs-on: ubuntu-latest
+    #env:
+      #REPO: ${{ secrets.DOCKER_REPO }} ea8999b9-356b-44c8-9fe0-be8d860d113e
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        #run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: odenigbogodfrey/abatino-worker:latest
+  
+  deploy:
+    runs-on: ubuntu-latest
+    name: Redeploy webhook call
+    needs: [worker]
+    steps:
+      - name: Deploy webhook call
+        uses: joelwmale/webhook-action@master
+        env:
+          #WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
+          WEBHOOK_URL: http://162.0.230.238:9101/hooks/redeploy-abatino-worker
+          data: "[]"
