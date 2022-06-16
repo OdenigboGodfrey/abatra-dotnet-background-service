@@ -7,7 +7,17 @@
 - go back to parent page *
 - build data list structure *
 - fill structure with data *
-- persist structure to database
-- find front end
-- render data from persistent to front end
-- 
+- containerize application
+- create containerized database
+- calculate structure down to useful data [
+    - iterate through data, check if home or away dnb is greater
+    - or if away or home dnb is greater
+    - based on conditions, 
+    - calculate and suggest amount ratio sharing
+    - add to list
+]
+- persist list to database
+- web api to authenticate user
+- web api to get data
+- find front end *
+- render data to front end
