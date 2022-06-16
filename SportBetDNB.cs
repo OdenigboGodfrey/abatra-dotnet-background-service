@@ -23,8 +23,8 @@ public class SportyBetDNB : OddsPortal
     public override void DoTask()
     {
         Console.WriteLine("SportyBetDNB " + _redis.StringGet("second"));
-        //?time=2
-        startScraping("https://www.sportybet.com/ng/sport/football");
+        //development: "https://www.sportybet.com/ng/sport/football"?time=2
+        startScraping();
         
         // processScrappedData();
         detail();
