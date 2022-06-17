@@ -22,13 +22,20 @@ public class SportyBetDNB : OddsPortal
 
     public override void DoTask()
     {
-        Console.WriteLine("SportyBetDNB " + _redis.StringGet("second"));
-        //development: "https://www.sportybet.com/ng/sport/football"?time=2
-        startScraping();
-        
-        // processScrappedData();
-        detail();
-        _redis.StringSet(DateTime.Now.ToString("yyyy-MM-dd"), MyDictionaryToJson(nextUrls));
+        try
+        {
+            Console.WriteLine("SportyBetDNB " + _redis.StringGet("second"));
+            //development: "https://www.sportybet.com/ng/sport/football"?time=2
+            startScraping();
+
+            // processScrappedData();
+            detail();
+            _redis.StringSet(DateTime.Now.ToString("yyyy-MM-dd"), MyDictionaryToJson(nextUrls));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 
     private void detail()
@@ -229,7 +236,7 @@ public class SportyBetDNB : OddsPortal
                 {
                     // navigate to url
                     driver.Navigate().GoToUrl(url);
-                    double firstOdd,secondOdd;
+                    double firstOdd, secondOdd;
 
 
                     var elements = driver.FindElements(By.CssSelector(".m-detail-wrapper .m-table__wrapper"));
@@ -241,7 +248,7 @@ public class SportyBetDNB : OddsPortal
                     var _awayOdd = double.Parse((elements[0].FindElement(By.CssSelector(".m-table .m-outcome .m-table-cell:nth-child(3) span:nth-child(2)"))).Text);
                     var _time = driver.FindElements(By.CssSelector(".m-t-info .game-time"));
                     var eventId = driver.FindElements(By.CssSelector(".m-t-info .event-id"));
-                    
+
                     nextUrls[key].matchTime = _time[0].Text;
                     nextUrls[key].eventId = eventId[0].Text;
 
@@ -287,12 +294,14 @@ public class SportyBetDNB : OddsPortal
                                 // nextUrls[key].homeTeamDNBOdd = double.Parse(_homeDNBOdd.Text);
 
                                 double total = firstOdd + secondOdd;
-                                if (firstOdd < secondOdd) {
+                                if (firstOdd < secondOdd)
+                                {
 
                                 }
                                 nextUrls[key].DNBOddMoney = Math.Round((firstOdd / total) * 100);
                                 nextUrls[key].HAOddMoney = Math.Round((secondOdd / total) * 100);
-                                if (nextUrls[key].DNBOddMoney > nextUrls[key].HAOddMoney) {
+                                if (nextUrls[key].DNBOddMoney > nextUrls[key].HAOddMoney)
+                                {
                                     nextUrls[key].systemApproved = true;
                                 }
 
@@ -322,7 +331,7 @@ public class SportyBetDNB : OddsPortal
         }
     }
 
-    private void miniCalculations() {}
+    private void miniCalculations() { }
 
     string MyDictionaryToJson(Dictionary<string, DTODNB> dict)
     {
