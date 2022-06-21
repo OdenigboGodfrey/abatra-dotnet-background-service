@@ -1,5 +1,6 @@
 using System.Net;
 using System.Web;
+using Newtonsoft.Json;
 
 public class Utility
 {
@@ -28,4 +29,19 @@ public class Utility
 
         return ToBeReturned;
     }
+
+    public static  string MyDictionaryToJson<T>(T dict)
+    {
+        return JsonConvert.SerializeObject(dict);
+        // var entries = dict.Select(d =>
+        //     string.Format("\"{0}\": [{1}]", d.Key, JsonSerializer.Serialize(d.Value)));
+        // return "{" + string.Join(",", entries) + "}";
+    }
+
+    public static T MyJsonToDictionary<T>(string json)
+    {
+        //return JsonConvert.DeserializeObject<Dictionary<string, DTODNB>>(json);
+        return JsonConvert.DeserializeObject<T>(json);
+    }
+
 }

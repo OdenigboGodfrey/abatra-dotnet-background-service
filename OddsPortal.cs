@@ -12,7 +12,7 @@ public class OddsPortal
     protected IDatabase _redis;
     IConfiguration? configuration;
     private String redisHost;
-    AppSettings settings;
+    protected AppSettings settings;
 
     public OddsPortal()
     {}

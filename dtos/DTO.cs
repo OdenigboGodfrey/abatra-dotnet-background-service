@@ -13,5 +13,11 @@ class DTODNB
     public double DNBOddMoney;
     public bool systemApproved = false;
     public string? eventId;
+    public string? score;
+    public string? time;
+    public string? winner;
+    public double _1x2OdddWinGains = 0.0;
+    public double dnbWinGains = 0.0;
+    public double outcome = 0.0;
 
 }

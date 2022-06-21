@@ -16,9 +16,12 @@ public class SportyBetDNB : OddsPortal
     // String SeleniumURL = "http://host.docker.internal:4444/wd/hub";
     // String SeleniumURL = "http://172.28.0.2:4444/wd/hub";
     String SeleniumURL = "http://172.17.0.1:4444/wd/hub";
+    int defaultAmount;
 
     public SportyBetDNB(ILogger<Worker> logger) : base(logger)
-    { }
+    { 
+        defaultAmount = settings.DefaultBetAmount;
+    }
 
     public override void DoTask()
     {
@@ -294,19 +297,19 @@ public class SportyBetDNB : OddsPortal
                                 // nextUrls[key].homeTeamDNBOdd = double.Parse(_homeDNBOdd.Text);
 
                                 double total = firstOdd + secondOdd;
-                                if (firstOdd < secondOdd)
-                                {
-
-                                }
                                 nextUrls[key].DNBOddMoney = Math.Round((firstOdd / total) * 100);
                                 nextUrls[key].HAOddMoney = Math.Round((secondOdd / total) * 100);
-                                if (nextUrls[key].DNBOddMoney > nextUrls[key].HAOddMoney)
+                                if (nextUrls[key].DNBOddMoney > nextUrls[key].HAOddMoney && nextUrls[key].HAOddMoney <= settings.DNBCutOff)
                                 {
                                     nextUrls[key].systemApproved = true;
                                 }
 
+                                // calculate what gains would be 
+                                nextUrls[key]._1x2OdddWinGains = firstOdd * ((nextUrls[key].HAOddMoney / 100) * defaultAmount);
+                                nextUrls[key].dnbWinGains = secondOdd * ((nextUrls[key].DNBOddMoney / 100) * defaultAmount);
 
-                                _logger.LogInformation("DNB home Odd vs DNB away Odd : {0} vs {1} - key: {2}", _homeDNBOdd, _awayDNBOdd, key);
+
+                                _logger.LogInformation("DNB home Odd vs DNB away Odd : {0} vs {1} - key: {2}, HA {3} DNBCutoff {4}", _homeDNBOdd, _awayDNBOdd, key, nextUrls[key].HAOddMoney, settings.DNBCutOff);
                                 break;
                             }
                         }
@@ -346,4 +349,5 @@ public class SportyBetDNB : OddsPortal
         //return JsonConvert.DeserializeObject<Dictionary<string, DTODNB>>(json);
         return JsonConvert.DeserializeObject<T>(json);
     }
+
 }
