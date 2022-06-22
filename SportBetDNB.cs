@@ -56,7 +56,7 @@ public class SportyBetDNB : OddsPortal
                     continue;
                 }
                 scrapDetailed(item.url, _key);
-                Console.WriteLine($"Scrapping ${_key} complete");
+                Console.WriteLine($"Scrapping {_key} complete");
             }
             catch (Exception ex)
             {
@@ -240,11 +240,14 @@ public class SportyBetDNB : OddsPortal
                     // navigate to url
                     driver.Navigate().GoToUrl(url);
                     double firstOdd, secondOdd;
+                    Utility.WaitForJs(driver);
 
 
                     var elements = driver.FindElements(By.CssSelector(".m-detail-wrapper .m-table__wrapper"));
                     if (elements.Count() == 0)
                     {
+                        _logger.LogInformation($"{key}: No elements found");
+                        nextUrls[key].status = -1;
                         return;
                     };
                     var _homeOdd = double.Parse((elements[0].FindElement(By.CssSelector(".m-table .m-outcome .m-table-cell span:nth-child(2)"))).Text);
@@ -299,7 +302,8 @@ public class SportyBetDNB : OddsPortal
                                 double total = firstOdd + secondOdd;
                                 nextUrls[key].DNBOddMoney = Math.Round((firstOdd / total) * 100);
                                 nextUrls[key].HAOddMoney = Math.Round((secondOdd / total) * 100);
-                                if (nextUrls[key].DNBOddMoney > nextUrls[key].HAOddMoney && nextUrls[key].HAOddMoney <= settings.DNBCutOff)
+                                // nextUrls[key].DNBOddMoney > nextUrls[key].HAOddMoney && 
+                                if (nextUrls[key].HAOddMoney <= settings.DNBCutOff)
                                 {
                                     nextUrls[key].systemApproved = true;
                                 }

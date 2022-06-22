@@ -1,4 +1,4 @@
-- render data to front end
-- persist data 
-- scrap after result  and update records on the system
+- persist data
+- scrap after result  and update records on the system *
+- check for duplicates
 

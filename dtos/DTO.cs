@@ -19,5 +19,6 @@ class DTODNB
     public double _1x2OdddWinGains = 0.0;
     public double dnbWinGains = 0.0;
     public double outcome = 0.0;
+    public DateTime createdOn = DateTime.Now;
 
 }

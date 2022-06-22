@@ -1,6 +1,8 @@
 using System.Net;
 using System.Web;
 using Newtonsoft.Json;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Remote;
 
 public class Utility
 {
@@ -42,6 +44,23 @@ public class Utility
     {
         //return JsonConvert.DeserializeObject<Dictionary<string, DTODNB>>(json);
         return JsonConvert.DeserializeObject<T>(json);
+    }
+
+    public static void WaitForJs(RemoteWebDriver driver)
+    {
+        int delay = 5;
+        // 5 secs delay
+        while (delay > 0)
+        {
+            Thread.Sleep(1000);
+            var jquery = (bool)(driver as IJavaScriptExecutor)
+                .ExecuteScript("return window.jQuery == undefined");
+            if (jquery)
+            {
+                break;
+            }
+            delay--;
+        }
     }
 
 }
