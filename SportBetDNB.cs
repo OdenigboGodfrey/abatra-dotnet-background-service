@@ -140,7 +140,7 @@ public class SportyBetDNB : OddsPortal
             options.AddArgument("no-sandbox");
 
             //scrap for the titles and their respective urls(href)
-            using (RemoteWebDriver driver = new RemoteWebDriver(new Uri(SeleniumURL), options.ToCapabilities()))
+            using (RemoteWebDriver driver = new RemoteWebDriver(new Uri(SeleniumURL), options.ToCapabilities(), TimeSpan.FromMinutes(1)))
             {
                 // navigate to url
                 driver.Navigate().GoToUrl(url);
@@ -233,7 +233,7 @@ public class SportyBetDNB : OddsPortal
 
 
             // using (var driver = new ChromeDriver(".", options))
-            using (RemoteWebDriver driver = new RemoteWebDriver(new Uri(SeleniumURL), options.ToCapabilities()))
+            using (RemoteWebDriver driver = new RemoteWebDriver(new Uri(SeleniumURL), options.ToCapabilities(), TimeSpan.FromMinutes(1)))
             {
                 try
                 {
