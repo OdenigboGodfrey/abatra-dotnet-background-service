@@ -19,7 +19,7 @@ public class SportyBetDNB : OddsPortal
     int defaultAmount;
 
     public SportyBetDNB(ILogger<Worker> logger) : base(logger)
-    { 
+    {
         defaultAmount = settings.DefaultBetAmount;
     }
 
@@ -56,7 +56,7 @@ public class SportyBetDNB : OddsPortal
                     continue;
                 }
                 scrapDetailed(item.url, _key);
-                Console.WriteLine($"Scrapping {_key} complete");
+                Console.WriteLine($"Scrapping Detail complete");
             }
             catch (Exception ex)
             {
@@ -163,6 +163,14 @@ public class SportyBetDNB : OddsPortal
 
                 try
                 {
+                    var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+                    var fetchedGames = _redis.StringGet(currentDate);
+                    Dictionary<string, DTODNB> games = new Dictionary<string, DTODNB>();
+                    if (!string.IsNullOrEmpty(fetchedGames))
+                    {
+                        games = Utility.MyJsonToDictionary<Dictionary<string, DTODNB>>(fetchedGames);
+                    }
+
                     main = driver.FindElements(By.CssSelector("div.match-row"));
 
                     for (var i = 0; i < main.Count();)
@@ -180,7 +188,8 @@ public class SportyBetDNB : OddsPortal
                                     _logger.LogInformation("Home Content : {0} vs {1}", homeElement.Text, awayElement.Text);
 
                                     string key = $"{homeElement.Text}-{awayElement.Text}";
-                                    if (nextUrls.ContainsKey(key)) continue;
+                                    //prevent duplications
+                                    if (nextUrls.ContainsKey(key) || games.ContainsKey(key)) continue;
 
                                     nextUrls.Add(key, new DTODNB()
                                     {
@@ -316,6 +325,8 @@ public class SportyBetDNB : OddsPortal
                                 _logger.LogInformation("DNB home Odd vs DNB away Odd : {0} vs {1} - key: {2}, HA {3} DNBCutoff {4}", _homeDNBOdd, _awayDNBOdd, key, nextUrls[key].HAOddMoney, settings.DNBCutOff);
                                 break;
                             }
+
+                            Console.WriteLine($"Scrapping {key} complete");
                         }
                         catch (Exception e)
                         {
@@ -324,13 +335,14 @@ public class SportyBetDNB : OddsPortal
 
                     }
 
-
                 }
                 catch (Exception ex)
                 {
                     _logger.LogInformation("Exception : {0}", ex.Message);
                 }
             }
+            //sleep for 3 seconds
+            Thread.Sleep(3000);
         }
         catch (Exception e)
         {
