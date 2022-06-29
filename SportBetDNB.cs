@@ -84,11 +84,11 @@ public class SportyBetDNB : OddsPortal
                     var games = mongoContext.findWhere<DTODNB>(settings.MongoDB, filterDefinition).ToList();
                     // Console.WriteLine("Called data {0}", Utility.MyDictionaryToJson(data));
                     // Console.WriteLine("================================================================");
-                    Console.WriteLine("Called fetchedGames {0}", Utility.MyDictionaryToJson(games));
-                    driver.Close();
-                    driver.Dispose();
-                    driver.Quit();
-                    Environment.Exit(0);
+                    // Console.WriteLine("Called fetchedGames {0}", Utility.MyDictionaryToJson(games));
+                    // driver.Close();
+                    // driver.Dispose();
+                    // driver.Quit();
+                    // Environment.Exit(0);
 
                     main = driver.FindElements(By.CssSelector("div.match-row"));
 
