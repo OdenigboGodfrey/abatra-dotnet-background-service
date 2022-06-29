@@ -12,10 +12,10 @@ public class SportyBetDNB : OddsPortal
 {
     // private readonly ILogger<Worker> _logger;
     Dictionary<string, DTODNB> nextUrls = new Dictionary<string, DTODNB>();
-    String SeleniumURL = "http://127.0.0.1:4444/wd/hub";
+    //String SeleniumURL = "http://127.0.0.1:4444/wd/hub";
     // String SeleniumURL = "http://host.docker.internal:4444/wd/hub";
     // String SeleniumURL = "http://172.28.0.2:4444/wd/hub";
-    //String SeleniumURL = "http://172.17.0.1:4444/wd/hub";
+    String SeleniumURL = "http://172.17.0.1:4444/wd/hub";
     int defaultAmount;
 
     public SportyBetDNB(ILogger<Worker> logger) : base(logger)
