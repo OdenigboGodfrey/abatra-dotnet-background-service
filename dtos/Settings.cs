@@ -5,6 +5,8 @@ public sealed class AppSettings
     public int ServiceTimerMins { get; set; }
     public int DNBCutOff { get; set; }
     public int DefaultBetAmount { get; set; }
+    public string? MongoConnectionString {get; set;}
+    public string? MongoDB {get; set;}
     
     
 }

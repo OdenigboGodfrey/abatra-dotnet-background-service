@@ -6,6 +6,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         // services.AddHostedService<Worker>();
         services.AddHostedService<BGTestWorker>();
+        // services.AddScoped<ImongoAbatinoDbContext, MonogoAbatinoDBContext>();
     })
     .Build();
 

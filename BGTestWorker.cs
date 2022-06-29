@@ -5,6 +5,8 @@ using System.Text.Json.Serialization;
 using StackExchange.Redis;
 using Microsoft.Extensions.Configuration;
 using System.Timers;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace worker;
 
@@ -18,6 +20,8 @@ public class BGTestWorker : BackgroundService
     // private OddsPortal _oddsPortal;
     private SportyBetDNB _sportyBetdnb;
     private IDatabase _redis;
+    public static IMongoDatabase _mongo;
+    public static MongoContext mongoContext;
     private readonly System.Timers.Timer _timer;
 
     public static IConfiguration? configuration;
@@ -34,18 +38,16 @@ public class BGTestWorker : BackgroundService
 
         settings = configuration.GetRequiredSection("Settings").Get<AppSettings>();
 
-
-        // Console.WriteLine("configuration: " + settings.RedisCacheOptions);
-        var redis = ConnectionMultiplexer.Connect(settings.RedisCacheOptions);
-        _redis = redis.GetDatabase();
-
-        // _oddsPortal = new OddsPortal(_logger);
+        // configureMongo();
+        mongoContext = new MongoContext();
+        
         _sportyBetdnb = new SportyBetDNB(_logger);
 
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        // initial run
         _sportyBetdnb.DoTask();
 
         var timer = new PeriodicTimer(TimeSpan.FromMinutes(settings.ServiceTimerMins));
@@ -56,8 +58,5 @@ public class BGTestWorker : BackgroundService
             Console.WriteLine("Called");
             _sportyBetdnb.DoTask();
         }
-
-        // while (!stoppingToken.IsCancellationRequested)
-        // { }
     }
 }

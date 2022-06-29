@@ -1,4 +1,7 @@
-- persist data
-- scrap after result  and update records on the system *
-- check for duplicates
+- persist data *
+- scrap after result  and update records on the system 
+- check for duplicates *
+- move all saving from redis to mongo
+- new flow: scrap -> wait -> scrap detailed -> save -> iterate
+- 
 

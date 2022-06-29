@@ -1,5 +1,12 @@
-class DTODNB
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+public class DTODNB
 {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
+
     public string url;
     public string homeTeamTitle;
     public string awayTeamTitle;
@@ -20,5 +27,6 @@ class DTODNB
     public double dnbWinGains = 0.0;
     public double outcome = 0.0;
     public DateTime createdOn = DateTime.Now;
+    public DateTime createDate = DateTime.Today;
 
 }

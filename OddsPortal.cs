@@ -10,6 +10,7 @@ public class OddsPortal
 {
     protected readonly ILogger<Worker> _logger;
     protected IDatabase _redis;
+    protected MongoContext mongoContext;
     IConfiguration? configuration;
     private String redisHost;
     protected AppSettings settings;
@@ -24,12 +25,13 @@ public class OddsPortal
         configuration = BGTestWorker.configuration;
         
         settings = BGTestWorker.settings;
+        mongoContext = BGTestWorker.mongoContext;
 
         // Console.WriteLine("configuration: " + settings.RedisCacheOptions);
         redisHost = settings.RedisCacheOptions;
 
-        var redis = ConnectionMultiplexer.Connect(redisHost);
-        _redis = redis.GetDatabase();
+        // var redis = ConnectionMultiplexer.Connect(redisHost);
+        // _redis = redis.GetDatabase();
     }
 
 
