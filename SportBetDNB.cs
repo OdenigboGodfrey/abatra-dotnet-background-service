@@ -112,10 +112,10 @@ public class SportyBetDNB : OddsPortal
 
                                     string key = $"{homeElement.Text}-{awayElement.Text}";
                                     //prevent duplications
-                                    // if (nextUrls.ContainsKey(key) || games.Any(x => x.homeTeamTitle == homeElement.Text && x.awayTeamTitle == awayElement.Text)) {
-                                    //     Console.WriteLine("Game already scrapped, skipping");
-                                    //     continue;
-                                    // };
+                                    if (games.Any(x => x.homeTeamTitle == homeElement.Text && x.awayTeamTitle == awayElement.Text && x.createDate == DateTime.Today)) {
+                                        Console.WriteLine("Game already scrapped, skipping");
+                                        continue;
+                                    };
 
                                     nextUrls.Add(key, new DTODNB()
                                     {
