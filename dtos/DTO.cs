@@ -28,5 +28,6 @@ public class DTODNB
     public double outcome = 0.0;
     public DateTime createdOn = DateTime.Now;
     public DateTime createDate = DateTime.Today;
+    public string? category = "pre-match";
 
 }
