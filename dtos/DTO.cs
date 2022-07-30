@@ -1,12 +1,13 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
+[BsonIgnoreExtraElements]
 public class DTODNB
 {
+    // game/match object
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
-
     public string url;
     public string homeTeamTitle;
     public string awayTeamTitle;
@@ -29,5 +30,66 @@ public class DTODNB
     public DateTime createdOn = DateTime.Now;
     public DateTime createDate = DateTime.Today;
     public string? category = "pre-match";
+    public string? matchId = Guid.NewGuid().ToString();
+}
 
+[BsonIgnoreExtraElements]
+public class OddDTO : ICloneable
+{
+    public object Clone()
+    {
+        var _clone = this.MemberwiseClone();
+        return _clone;
+    }
+    
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
+    public string matchId;
+    public double homeTeamOdd;
+    public double awayTeamOdd;
+    public double drawOdd;
+    public double homeTeamDNBOdd;
+    public double awayTeamDNBOdd;
+    public string homeTeamTitle;
+    public string awayTeamTitle;
+    public OverUnderOddDTO OUOdd;
+    public DateTime createdOn = DateTime.Now;
+    public DateTime createDate = DateTime.Today;
+    public string? category = "fulltime";
+    public string? type = "dnb";
+    public bool systemApproved = false;
+    public double firstOddMoney;
+    public double secondOddMoney;
+    public double thirdOddMoney;
+    public double firstOddGain;
+    public double secondOddGain;
+    public double thirdOddGain;
+    public double? abatrage = 0.0;
+    public string? winner;
+    public double outcome = 0.0;
+    public string[]? score;
+    public double firstOdd;
+    public double secondOdd;
+}
+
+public class OverUnderOddDTO
+{
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
+    public double over05;
+    public double under05;
+    public double over15;
+    public double under15;
+    public double over25;
+    public double under25;
+    public double over35;
+    public double under35;
+    public double over45;
+    public double under45;
+    public double over55;
+    public double under55;
+    public DateTime createdOn = DateTime.Now;
+    public DateTime createDate = DateTime.Today;
 }

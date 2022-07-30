@@ -32,7 +32,7 @@ public class Utility
         return ToBeReturned;
     }
 
-    public static  string MyDictionaryToJson<T>(T dict)
+    public static string MyDictionaryToJson<T>(T dict)
     {
         return JsonConvert.SerializeObject(dict);
         // var entries = dict.Select(d =>
@@ -61,6 +61,13 @@ public class Utility
             }
             delay--;
         }
+    }
+
+    public static double calcAbatrage(double homeOdd, double drawOdd, double awayOdd)
+    {
+        var aba = (1 / (homeOdd)) + (1 / (drawOdd)) + (1 / (awayOdd));
+        aba = aba * 100;
+        return aba;
     }
 
 }

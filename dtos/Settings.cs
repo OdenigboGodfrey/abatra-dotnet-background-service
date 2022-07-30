@@ -7,6 +7,8 @@ public sealed class AppSettings
     public int DefaultBetAmount { get; set; }
     public string? MongoConnectionString {get; set;}
     public string? MongoDB {get; set;}
+    public int DNB1x2Cutoff {get; set;}
+    
     
     
 }

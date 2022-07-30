@@ -21,7 +21,7 @@ public class BGTestWorker : BackgroundService
     private SportyBetDNB _sportyBetdnb;
     private IDatabase _redis;
     public static IMongoDatabase _mongo;
-    public static MongoContext mongoContext;
+    public static MongoContext<DTODNB> mongoContext;
     private readonly System.Timers.Timer _timer;
 
     public static IConfiguration? configuration;
@@ -39,7 +39,7 @@ public class BGTestWorker : BackgroundService
         settings = configuration.GetRequiredSection("Settings").Get<AppSettings>();
 
         // configureMongo();
-        mongoContext = new MongoContext();
+        mongoContext = new MongoContext<DTODNB>();
         
         _sportyBetdnb = new SportyBetDNB(_logger);
 

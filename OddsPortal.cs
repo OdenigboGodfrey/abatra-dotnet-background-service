@@ -10,7 +10,7 @@ public class OddsPortal
 {
     protected readonly ILogger<Worker> _logger;
     protected IDatabase _redis;
-    protected MongoContext mongoContext;
+    protected MongoContext<DTODNB> mongoContext;
     IConfiguration? configuration;
     private String redisHost;
     protected AppSettings settings;
