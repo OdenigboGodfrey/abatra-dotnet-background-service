@@ -24,7 +24,7 @@ public class SportyBetDNB : OddsPortal
         defaultAmount = settings.DefaultBetAmount;
     }
 
-    
+
 
     public override void DoTask()
     {
@@ -212,6 +212,7 @@ public class SportyBetDNB : OddsPortal
                 var secondHalfoddInfo = (OddDTO)oddInfo.Clone();
                 var firstHalfDNBoddInfo = (OddDTO)oddInfo.Clone();
                 var secondHalfDNBoddInfo = (OddDTO)oddInfo.Clone();
+                var fulltimeDNBoddInfo = (OddDTO)oddInfo.Clone(); ;
 
                 if (_homeOdd > _awayOdd)
                 {
@@ -234,7 +235,7 @@ public class SportyBetDNB : OddsPortal
                         var header = elements[i].FindElement(By.CssSelector(".m-table-header .m-table-row .m-table-cell .m-table-header-title"));
 
                         if (false)
-                        //if (header.Text.ToLower().Contains("over") && header.Text.ToLower().Contains("under"))
+                        // if (header.Text.ToLower().Contains("over") && header.Text.ToLower().Contains("under"))
                         {
                             var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
                             var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
@@ -248,16 +249,19 @@ public class SportyBetDNB : OddsPortal
                             if (header.Text.ToLower().Contains("1st half"))
                             {
                                 modifyOUObject(_overOddTitle, ouObject, _overOdd, _underOdd);
+                                firstHalfDNBoddInfo.OUOdd = ouObject;
                             }
                             // 2nd half
                             else if (header.Text.ToLower().Contains("2nd half"))
                             {
                                 modifyOUObject(_overOddTitle, ouObject, _overOdd, _underOdd);
+                                secondHalfDNBoddInfo.OUOdd = ouObject;
                             }
                             // full time
                             else
                             {
                                 modifyOUObject(_overOddTitle, ouObject, _overOdd, _underOdd);
+                                fulltimeDNBoddInfo.OUOdd = ouObject;
                             }
 
                         }
@@ -348,7 +352,6 @@ public class SportyBetDNB : OddsPortal
 
                         if (header.Text == "Draw No Bet")
                         {
-                            var fulltimeDNBoddInfo = (OddDTO)oddInfo.Clone(); ;
                             fulltimeDNBoddInfo.category = MatchCategory.fullTime.ToString();
                             fulltimeDNBoddInfo.type = EventType.fullTimeDNB.ToString();
 
@@ -390,10 +393,11 @@ public class SportyBetDNB : OddsPortal
 
                             processDNBEvent(fulltimeDNBoddInfo);
 
-                            if (fulltimeDNBoddInfo.secondOddMoney <= settings.DNB1x2Cutoff)
-                            {
-                                processDNB1x2Event(fulltimeDNBoddInfo, EventType.fullTimeDNB1x2);
-                            }
+                            // if (fulltimeDNBoddInfo.secondOddMoney <= settings.DNB1x2Cutoff)
+                            // {
+
+                            // }
+                            processDNB1x2Event(fulltimeDNBoddInfo, EventType.fullTimeDNB1x2);
 
                             writeToDb<OddDTO>(fulltimeDNBoddInfo);
                             //break;
@@ -422,7 +426,7 @@ public class SportyBetDNB : OddsPortal
                 // second half 
                 secondHalfDNBoddInfo.homeTeamOdd = secondHalfoddInfo.homeTeamOdd;
                 secondHalfDNBoddInfo.awayTeamOdd = secondHalfoddInfo.awayTeamOdd;
-                secondHalfDNBoddInfo.drawOdd =  secondHalfoddInfo.drawOdd;
+                secondHalfDNBoddInfo.drawOdd = secondHalfoddInfo.drawOdd;
 
                 processDNBEvent(secondHalfDNBoddInfo);
 
@@ -460,12 +464,14 @@ public class SportyBetDNB : OddsPortal
     private void writeToDb<T>(T data)
     {
         Console.WriteLine("Writing DB");
-        if (IsTypeof<DTODNB>(data)) {
+        if (IsTypeof<DTODNB>(data))
+        {
             Console.WriteLine("Writing DB match");
-            
+
             mongoContext.insertOne<T>(DbCollections.match.ToString(), data);
         }
-        else if (IsTypeof<OddDTO>(data)) {
+        else if (IsTypeof<OddDTO>(data))
+        {
             Console.WriteLine("Writing DB event");
             mongoContext.insertOne<T>(DbCollections.matchEvent.ToString(), data);
         }
