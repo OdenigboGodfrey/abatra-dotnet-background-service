@@ -339,6 +339,7 @@ public class SportyBetDNB : OddsPortal
 
                             var _homeDNBOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
                             var _awayDNBOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+                            var _2nddrawOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-table .m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
 
                             secondHalfDNBoddInfo.awayTeamDNBOdd = _awayDNBOdd;
                             secondHalfDNBoddInfo.homeTeamDNBOdd = _homeDNBOdd;
@@ -409,32 +410,26 @@ public class SportyBetDNB : OddsPortal
                 // first half
                 firstHalfDNBoddInfo.homeTeamOdd = firstHalfoddInfo.homeTeamOdd;
                 firstHalfDNBoddInfo.awayTeamOdd = firstHalfoddInfo.awayTeamOdd;
+                firstHalfDNBoddInfo.drawOdd = firstHalfoddInfo.drawOdd;
                 processDNBEvent(firstHalfDNBoddInfo);
 
                 _logger.LogInformation("1st Half DNB {0}: {1}", firstHalfDNBoddInfo.homeTeamDNBOdd, firstHalfDNBoddInfo.awayTeamDNBOdd);
                 _logger.LogInformation("1st Half DNB Cash % {0}%: {1}%", firstHalfDNBoddInfo.firstOddMoney, firstHalfDNBoddInfo.secondOddMoney);
 
-                if (firstHalfDNBoddInfo.secondOddMoney <= settings.DNB1x2Cutoff)
-                {
-                    processDNB1x2Event(firstHalfDNBoddInfo, EventType.firstHalfDNB1x2);
-                }
-
+                processDNB1x2Event(firstHalfDNBoddInfo, EventType.firstHalfDNB1x2);
                 writeToDb<OddDTO>(firstHalfDNBoddInfo);
 
                 // second half 
                 secondHalfDNBoddInfo.homeTeamOdd = secondHalfoddInfo.homeTeamOdd;
                 secondHalfDNBoddInfo.awayTeamOdd = secondHalfoddInfo.awayTeamOdd;
+                secondHalfDNBoddInfo.drawOdd =  secondHalfoddInfo.drawOdd;
 
                 processDNBEvent(secondHalfDNBoddInfo);
 
                 _logger.LogInformation("2nd Half DNB {0}: {1} || {2}: {3}", secondHalfDNBoddInfo.homeTeamDNBOdd, secondHalfDNBoddInfo.awayTeamDNBOdd, secondHalfDNBoddInfo.homeTeamOdd, secondHalfDNBoddInfo.awayTeamOdd);
                 _logger.LogInformation("2nd Half DNB Cash % {0}%: {1}%", secondHalfDNBoddInfo.firstOddMoney, secondHalfDNBoddInfo.secondOddMoney);
 
-                if (secondHalfDNBoddInfo.secondOddMoney <= settings.DNB1x2Cutoff)
-                {
-                    processDNB1x2Event(secondHalfDNBoddInfo, EventType.secondHalfDNB1x2);
-                }
-
+                processDNB1x2Event(secondHalfDNBoddInfo, EventType.secondHalfDNB1x2);
                 writeToDb<OddDTO>(secondHalfDNBoddInfo);
 
 
