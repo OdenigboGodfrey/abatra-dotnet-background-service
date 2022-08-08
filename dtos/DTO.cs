@@ -71,6 +71,8 @@ public class OddDTO : ICloneable
     public string[]? score;
     public double firstOdd;
     public double secondOdd;
+    public double ggOdd;
+    public double ngOdd;
 }
 
 public class OverUnderOddDTO
@@ -90,6 +92,32 @@ public class OverUnderOddDTO
     public double under45;
     public double over55;
     public double under55;
+    public double homeTeamOver05;
+    public double homeTeamUnder05;
+    public double homeTeamOver15;
+    public double homeTeamUnder15;
+    public double homeTeamOver25;
+    public double homeTeamUnder25;
+    public double homeTeamOver35;
+    public double homeTeamUnder35;
+    public double homeTeamOver45;
+    public double homeTeamUnder45;
+    public double homeTeamOver55;
+    public double homeTeamUnder55;
+
+    public double awayTeamOver05;
+    public double awayTeamUnder05;
+    public double awayTeamOver15;
+    public double awayTeamUnder15;
+    public double awayTeamOver25;
+    public double awayTeamUnder25;
+    public double awayTeamOver35;
+    public double awayTeamUnder35;
+    public double awayTeamOver45;
+    public double awayTeamUnder45;
+    public double awayTeamOver55;
+    public double awayTeamUnder55;
+    
     public DateTime createdOn = DateTime.Now;
     public DateTime createDate = DateTime.Today;
 }

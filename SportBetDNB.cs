@@ -96,6 +96,7 @@ public class SportyBetDNB : OddsPortal
                     main = driver.FindElements(By.CssSelector("div.match-row"));
 
                     for (var i = 0; i < main.Count();)
+                    //for (var i = 0; i < 2;)
                     {
                         try
                         {
@@ -156,6 +157,7 @@ public class SportyBetDNB : OddsPortal
                         {
                             _logger.LogInformation(ex.ToString());
                         }
+                        break;
                     }
                 }
                 catch (Exception ex)
@@ -214,6 +216,10 @@ public class SportyBetDNB : OddsPortal
                 var secondHalfDNBoddInfo = (OddDTO)oddInfo.Clone();
                 var fulltimeDNBoddInfo = (OddDTO)oddInfo.Clone(); ;
 
+                var firstHalfOU = new OverUnderOddDTO();
+                var secondHalfOU = new OverUnderOddDTO();
+                var ftOU = new OverUnderOddDTO();
+
                 if (_homeOdd > _awayOdd)
                 {
                     nextUrls[key].awayTeamOdd = _awayOdd;
@@ -234,36 +240,178 @@ public class SportyBetDNB : OddsPortal
                     {
                         var header = elements[i].FindElement(By.CssSelector(".m-table-header .m-table-row .m-table-cell .m-table-header-title"));
 
-                        if (false)
-                        // if (header.Text.ToLower().Contains("over") && header.Text.ToLower().Contains("under"))
+                        // if (false)
+                        if (header.Text == "1st Half - Over/Under")
                         {
+                            Console.WriteLine($"working on 1st half scores");
                             var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
                             var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
 
                             var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
                             var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
 
-                            var ouObject = new OverUnderOddDTO();
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyOUObject(_overOddTitle, firstHalfOU, _overOdd, _underOdd);
+                        }
+                        
+                        if (header.Text == "2nd Half - Over/Under")
+                        {
+                            Console.WriteLine($"working on 2nd Half scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
 
-                            // 1st half
-                            if (header.Text.ToLower().Contains("1st half"))
-                            {
-                                modifyOUObject(_overOddTitle, ouObject, _overOdd, _underOdd);
-                                firstHalfDNBoddInfo.OUOdd = ouObject;
-                            }
-                            // 2nd half
-                            else if (header.Text.ToLower().Contains("2nd half"))
-                            {
-                                modifyOUObject(_overOddTitle, ouObject, _overOdd, _underOdd);
-                                secondHalfDNBoddInfo.OUOdd = ouObject;
-                            }
-                            // full time
-                            else
-                            {
-                                modifyOUObject(_overOddTitle, ouObject, _overOdd, _underOdd);
-                                fulltimeDNBoddInfo.OUOdd = ouObject;
-                            }
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
 
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyOUObject(_overOddTitle, secondHalfOU, _overOdd, _underOdd);
+                        }
+                        
+                        if (header.Text == "Over/Under")
+                        {
+                            Console.WriteLine($"working on full time scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyOUObject(_overOddTitle, ftOU, _overOdd, _underOdd);
+                        }
+                        
+                        if (header.Text == "Home Team Over/Under")
+                        {
+                            Console.WriteLine($"working on full time scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyTeamOUObject(_overOddTitle, ftOU, _overOdd, _underOdd, "home");
+                        }
+                        
+                        if (header.Text == "Away Team Over/Under")
+                        {
+                            Console.WriteLine($"working on full time scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyTeamOUObject(_overOddTitle, ftOU, _overOdd, _underOdd, "away");
+                        }
+                        
+                        if (header.Text == "1st Half - Home Team Over/Under")
+                        {
+                            Console.WriteLine($"working on full time scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyTeamOUObject(_overOddTitle, firstHalfOU, _overOdd, _underOdd, "home");
+                        }
+
+                        if (header.Text == "1st Half - Away Team Over/Under")
+                        {
+                            Console.WriteLine($"working on full time scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyTeamOUObject(_overOddTitle, firstHalfOU, _overOdd, _underOdd, "away");
+                        }
+                        
+                        if (header.Text == "2nd Half - Home Team Over/Under")
+                        {
+                            Console.WriteLine($"working on full time scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyTeamOUObject(_overOddTitle, secondHalfOU, _overOdd, _underOdd, "home");
+                        }
+                        
+                        if (header.Text == "2nd Half - Away Team Over/Under")
+                        {
+                            Console.WriteLine($"working on full time scores");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            modifyTeamOUObject(_overOddTitle, secondHalfOU, _overOdd, _underOdd, "away");
+                        }
+                        
+                        if (header.Text == "GG/NG")
+                        {
+                            Console.WriteLine($"working on Goal goal || No Goal");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            fulltimeDNBoddInfo.ggOdd = _overOdd;
+                            fulltimeDNBoddInfo.ngOdd = _underOdd;
+                        }
+                        
+                        if (header.Text == "1st Half - GG/NG")
+                        {
+                            Console.WriteLine($"working on Goal goal || No Goal");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            firstHalfDNBoddInfo.ggOdd = _overOdd;
+                            firstHalfDNBoddInfo.ngOdd = _underOdd;
+                            //modifyTeamOUObject(_overOddTitle, secondHalfOU, _overOdd, _underOdd, "away");
+                        }
+                        
+                        if (header.Text == "2nd Half - GG/NG")
+                        {
+                            Console.WriteLine($"working on Goal goal || No Goal");
+                            var _overOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span"))).Text);
+                            var _overOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell span:nth-child(2)"))).Text);
+
+                            var _underOddTitle = ((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span"))).Text);
+                            var _underOdd = double.Parse((elements[i].FindElement(By.CssSelector(".m-outcome .m-table-cell:nth-child(2) span:nth-child(2)"))).Text);
+
+                            Console.WriteLine($"_overOddTitle {_overOddTitle}, _overOdd: {_overOdd} _underOddTitle: {_underOddTitle}, _underOdd {_underOdd}");
+                            
+                            secondHalfDNBoddInfo.ggOdd = _overOdd;
+                            secondHalfDNBoddInfo.ngOdd = _underOdd;
+                            //modifyTeamOUObject(_overOddTitle, secondHalfOU, _overOdd, _underOdd, "away");
                         }
 
                         if (header.Text == ("1X2"))
@@ -409,6 +557,11 @@ public class SportyBetDNB : OddsPortal
                     }
                 }
 
+                // over and under odds
+                firstHalfDNBoddInfo.OUOdd = firstHalfOU;
+                secondHalfDNBoddInfo.OUOdd = secondHalfOU;
+                fulltimeDNBoddInfo.OUOdd = ftOU;
+                
                 // process dnb info after match scrapping is done 
 
                 // first half
@@ -438,6 +591,11 @@ public class SportyBetDNB : OddsPortal
 
 
                 Console.WriteLine($"Writing Game to DB");
+
+                Console.WriteLine($"Core DTO");
+                Console.WriteLine($"1st half {Utility.MyDictionaryToJson(firstHalfDNBoddInfo)}");
+                Console.WriteLine($"2nd half {Utility.MyDictionaryToJson(secondHalfDNBoddInfo)}");
+                Console.WriteLine($"full time {Utility.MyDictionaryToJson(fulltimeDNBoddInfo)}");
                 // save full time match
                 writeToDb<DTODNB>(nextUrls[key]);
 
@@ -755,6 +913,76 @@ public class SportyBetDNB : OddsPortal
         {
             ouObject.over55 = _overOdd;
             ouObject.under55 = _underOdd;
+        }
+    }
+
+    private void modifyTeamOUObject(string _overOddTitle, OverUnderOddDTO ouObject, double _overOdd, double _underOdd, string side="home")
+    {
+        if (_overOddTitle.Contains("0.5"))
+        {
+            if (side == "home") {
+                ouObject.homeTeamOver05 = _overOdd;
+                ouObject.homeTeamUnder05 = _underOdd;
+            }
+            else {
+                ouObject.awayTeamOver05 = _overOdd;
+                ouObject.awayTeamUnder05 = _underOdd;
+            }
+        }
+        else if (_overOddTitle.Contains("1.5"))
+        {
+            if (side == "home") {
+                ouObject.homeTeamOver15 = _overOdd;
+                ouObject.homeTeamUnder15 = _underOdd;
+            }
+            else {
+                ouObject.awayTeamOver15 = _overOdd;
+                ouObject.awayTeamUnder15 = _underOdd;
+            }
+        }
+        else if (_overOddTitle.Contains("2.5"))
+        {
+            if (side == "home") {
+                ouObject.homeTeamOver25 = _overOdd;
+                ouObject.homeTeamUnder25 = _underOdd;
+            }
+            else {
+                ouObject.awayTeamOver25 = _overOdd;
+                ouObject.awayTeamUnder25 = _underOdd;
+            }
+        }
+        else if (_overOddTitle.Contains("3.5"))
+        {
+            if (side == "home") {
+                ouObject.homeTeamOver35 = _overOdd;
+                ouObject.homeTeamUnder35 = _underOdd;
+            }
+            else {
+                ouObject.awayTeamOver35 = _overOdd;
+                ouObject.awayTeamUnder35 = _underOdd;
+            }
+        }
+        else if (_overOddTitle.Contains("4.5"))
+        {
+            if (side == "home") {
+                ouObject.homeTeamOver45 = _overOdd;
+                ouObject.homeTeamUnder45 = _underOdd;
+            }
+            else {
+                ouObject.awayTeamOver45 = _overOdd;
+                ouObject.awayTeamUnder45 = _underOdd;
+            }
+        }
+        else if (_overOddTitle.Contains("5.5"))
+        {
+            if (side == "home") {
+                ouObject.homeTeamOver55 = _overOdd;
+                ouObject.homeTeamUnder55 = _underOdd;
+            }
+            else {
+                ouObject.awayTeamOver55 = _overOdd;
+                ouObject.awayTeamUnder55 = _underOdd;
+            }
         }
     }
 
