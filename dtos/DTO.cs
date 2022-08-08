@@ -71,6 +71,7 @@ public class OddDTO : ICloneable
     public string[]? score;
     public double firstOdd;
     public double secondOdd;
+    public string? status;
     public double ggOdd;
     public double ngOdd;
 }

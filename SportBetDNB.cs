@@ -157,7 +157,6 @@ public class SportyBetDNB : OddsPortal
                         {
                             _logger.LogInformation(ex.ToString());
                         }
-                        break;
                     }
                 }
                 catch (Exception ex)
